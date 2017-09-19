@@ -57,3 +57,8 @@ code {
 .content .by {
   font-weight: bold;
 }
+
+li.tweet {
+  list-style: none;
+  margin: 10px 0 ;
+}
