@@ -27,19 +27,21 @@
       {% endif %}
 
       <!-- display tweets here -->
-      {% for tweet in tweets %}
-        <li class = 'tweet'>
-          <div class = 'row'>
-            <div class = 'col-sm-1'>
-              <img src = "https://pbs.twimg.com/profile_images/2450268678/olxp11gnt09no2y2wpsh_normal.jpeg">
+      <ul id = 'allTweets'>
+        {% for tweet in tweets %}
+          <li class = 'tweet'>
+            <div class = 'row'>
+              <div class = 'col-sm-1'>
+                <img src = "https://pbs.twimg.com/profile_images/2450268678/olxp11gnt09no2y2wpsh_normal.jpeg">
+              </div>
+              <div class = 'col-sm-11'>
+                <a href="/users/{{tweet.name}}">{{tweet.name}}</a>
+                <p>{{tweet.content}}</p>
+              </div>
             </div>
-            <div class = 'col-sm-11'>
-              <a href="/users/{{tweet.name}}">{{tweet.name}}</a>
-              <p>{{tweet.content}}</p>
-            </div>
-          </div>
-        </li>
-      {% endfor %}
+          </li>
+        {% endfor %}
+      </ul>
 
 
     </div>

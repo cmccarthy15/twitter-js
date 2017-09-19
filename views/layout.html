@@ -79,4 +79,51 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
     <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
   </body>
+
+  <!--Socket.io implementation -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    // Load the socket.io library above, then connect to the server.
+    // Because the socket.io server is being run on the same server as your
+    // Express instance, you can connect() without any arguments.
+    var socket = io.connect();
+    socket.on('connect', function(){
+      console.log('connected to server via WebSockets!');
+    });
+    // When 'new_tweet' events are fired, do something with the packaged tweet
+    socket.on('newTweet', function (tweet) {
+      //tweet =
+      console.log(tweet);
+      var allChildren = document.getElementById('tweets').children;
+      var newTweet = allChildren[allChildren.length -1].cloneNode(true);
+      //console.log(document.getElementById('tweets').lastChildElement);
+      newTweet.getElementsByTagName('p').item(0).innerHTML =  tweet.tweet;
+      newTweet.getElementsByTagName('a').item(0).innerHTML =  tweet.name;
+      newTweet.getElementsByTagName('a').item(0).href =  "/users/" + tweet.name;
+
+      document.getElementById('tweets').appendChild(newTweet);
+      //needs to update
+      // <a href="/users/{{tweet.name}}">{{tweet.name}}</a>
+      //           <p>{{tweet.content}}</p>
+
+
+
+      alert('Refreshing... check the console...');
+      // some logic to add the new tweet to the DOM…
+
+
+      /* <div class = 'row'>
+            <div class = 'col-sm-1'>
+              <img src = "https://pbs.twimg.com/profile_images/2450268678/olxp11gnt09no2y2wpsh_normal.jpeg">
+            </div>
+            <div class = 'col-sm-11'>
+              <a href="/users/{{tweet.name}}">{{tweet.name}}</a>
+              <p>{{tweet.content}}</p>
+            </div>
+          </div>
+       *
+       */
+
+    });
+  </script>
 </html>

@@ -1,11 +1,16 @@
 const express = require('express');
 const app = express();
+const server = app.listen(3000);
 
 const chalk = require('chalk');
 const volleyball = require('volleyball');
 const morgan = require('morgan');
 
+const socketio = require('socket.io');
+const io = socketio.listen(server);
+
 const routes = require('./routes');
+app.use('/', routes(io));
 
 const locals = {
   title: 'An Example',
@@ -22,7 +27,6 @@ app.engine('html', nunjucks.render);
 nunjucks.configure('views', { noCache: true });
 // play with morgan configuration later
 app.use(morgan('tiny'));
-app.use('/', routes);
 
 // WITHOUT MORGAN OR VOLLEYBALL
 // app.use(function(req, res, next){
@@ -38,6 +42,4 @@ app.use('/', routes);
 // });
 
 
-app.listen(3000, function(){
-  console.log('server listening...');
-});
+
