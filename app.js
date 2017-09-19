@@ -5,6 +5,19 @@ const chalk = require('chalk');
 const volleyball = require('volleyball');
 const morgan = require('morgan');
 
+const locals = {
+  title: 'An Example',
+  people: [
+      { name: 'Gandalf'},
+      { name: 'Frodo' },
+      { name: 'Hermione'}
+  ]
+};
+
+const nunjucks = require('nunjucks');
+app.set('view engine', 'html');
+app.engine('html', nunjucks.render);
+nunjucks.configure('views', { noCache: true });
 // play with morgan configuration later
 app.use(morgan('tiny'));
 
@@ -21,8 +34,10 @@ app.use(morgan('tiny'));
 //   next();
 // });
 
+
+
 app.get('/', function(request, response){
-  response.send('Jambo');
+  response.render('index', locals);
 });
 
 app.get('/news', function(request, response){
