@@ -1,12 +1,20 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+
+const bodyParser = require('body-parser');
+// parse application/x-www-form-urlencoded
+router.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+router.use(bodyParser.json());
+
+router.use(express.static('public'));
 // could use one line instead: const router = require('express').Router();
 const tweetBank = require('../tweetBank');
 
 router.get('/', function (req, res) {
   let tweets = tweetBank.list();
-  res.render( 'index', { tweets: tweets } );
+  res.render( 'index', { tweets: tweets, showForm: true } );
   console.log(tweets);
 });
 
@@ -20,7 +28,7 @@ router.get('/users/:name', function(req, res){
   // };
 
   let tweets = tweetBank.find( {name: name} );
-  res.render('index', { tweets: tweets });
+  res.render('index', { tweets: tweets, showForm: true, username: name });
 });
 
 router.get('/tweets/:id', function(req, res){
@@ -29,7 +37,12 @@ router.get('/tweets/:id', function(req, res){
   res.render('index', { tweets: tweet });
 });
 
-router.use(express.static('public'));
+router.post('/tweets', function(req, res) {
+  var name = req.body.name;
+  var text = req.body.text;
+  tweetBank.add(name, text);
+  res.redirect('/');
+});
 
 // router.get('/stylesheets/style.css', function(req, res){
 //   res.sendFile(path.resolve(__dirname, '../public/stylesheets/style.css'));
