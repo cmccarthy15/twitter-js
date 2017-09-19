@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
+const chalk = require('chalk');
 
-app.use(function(response, request, next){
-  // console.log(request.domain); //verb
-  // console.log(); //route
+app.use('/', function(request, response, next){
+  console.log(chalk.pink(request.method), request.url);
   next();
 });
 
