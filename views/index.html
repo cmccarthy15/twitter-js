@@ -10,21 +10,25 @@
       <img src="https://pbs.twimg.com/profile_images/2450268678/olxp11gnt09no2y2wpsh_normal.jpeg"><br>
       <b>Your Name</b><br>
       100 followers
-    </div>
-    <div class="col-md-9">
-
-    <!-- displays tweet form -->
+      <!-- displays tweet form -->
       {% if showForm %}
       <form action="/tweets" method="POST">
-        <label for="name_field">Name:</label>
-        <input name="name" type="text" id="name_field" value= '{{ username }}' />
-
-        <label for="text_field">Text:</label>
-        <input name="text" type="text" id="text_field" style="width: 350px;" />
+        <div>
+          <label for="name_field">Name:</label>
+          <input name="name" type="text" id="name_field" value= '{{ username }}' />
+        </div>
+        <div>
+          <label for="text_field">Text:</label>
+          <input name="text" type="text" id="text_field" style="width: 225px;" />
+        </div>
 
         <input type="submit" value="Submit" />
       </form>
       {% endif %}
+    </div>
+    <div class="col-md-9">
+
+
 
       <!-- display tweets here -->
       <ul id = 'allTweets'>

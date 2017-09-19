@@ -45,11 +45,13 @@ module.exports = function (io){
     var text = req.body.text;
     tweetBank.add(name, text);
     io.sockets.emit('newTweet', {name: name, tweet: text});
-    res.redirect('/');
+    res.redirect('/users/' + name);
   });
 
   // router.get('/stylesheets/style.css', function(req, res){
-  //   res.sendFile(path.resolve(__dirname, '../public/stylesheets/style.css'));
+  //   res.sendFile(path.resolve(__dirname, '../public/stylesheets/style.css'), function(err){
+  //     if (err) throw err;
+  //   });
   // });
 
   // module.exports = router;

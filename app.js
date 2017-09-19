@@ -1,3 +1,5 @@
+'use strict';
+
 const express = require('express');
 const app = express();
 const server = app.listen(3000);
@@ -26,7 +28,7 @@ app.set('view engine', 'html');
 app.engine('html', nunjucks.render);
 nunjucks.configure('views', { noCache: true });
 // play with morgan configuration later
-app.use(morgan('tiny'));
+
 
 // WITHOUT MORGAN OR VOLLEYBALL
 // app.use(function(req, res, next){
