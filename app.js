@@ -5,6 +5,8 @@ const chalk = require('chalk');
 const volleyball = require('volleyball');
 const morgan = require('morgan');
 
+const routes = require('./routes');
+
 const locals = {
   title: 'An Example',
   people: [
@@ -20,6 +22,7 @@ app.engine('html', nunjucks.render);
 nunjucks.configure('views', { noCache: true });
 // play with morgan configuration later
 app.use(morgan('tiny'));
+app.use('/', routes);
 
 // WITHOUT MORGAN OR VOLLEYBALL
 // app.use(function(req, res, next){
@@ -34,15 +37,6 @@ app.use(morgan('tiny'));
 //   next();
 // });
 
-
-
-app.get('/', function(request, response){
-  response.render('index', locals);
-});
-
-app.get('/news', function(request, response){
-  response.send("You've got news!");
-});
 
 app.listen(3000, function(){
   console.log('server listening...');
