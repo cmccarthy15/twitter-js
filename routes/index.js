@@ -2,16 +2,17 @@ module.exports = function (io){
 
   const express = require('express');
   const router = express.Router();
+   // could use one line instead: const router = require('express').Router();
   const path = require('path');
 
   const bodyParser = require('body-parser');
-  // parse application/x-www-form-urlencoded
   router.use(bodyParser.urlencoded({ extended: false }));
-  // parse application/json
   router.use(bodyParser.json());
 
   router.use(express.static('public'));
-  // could use one line instead: const router = require('express').Router();
+ // the line above is in place of individual
+ // .gets for each file path and res.sendFile the file
+
   const tweetBank = require('../tweetBank');
 
   router.get('/', function (req, res) {
