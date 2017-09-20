@@ -4,10 +4,14 @@ const express = require('express');
 const app = express();
 const server = app.listen(3000);
 
+// adds text color
 const chalk = require('chalk');
-const volleyball = require('volleyball');
-const morgan = require('morgan');
 
+// middleware that will console log basic info about the req and res
+const volleyball = require('volleyball');
+const morgan = require('morgan'); // more common / standard
+
+// ...sockets...
 const socketio = require('socket.io');
 const io = socketio.listen(server);
 
@@ -23,6 +27,7 @@ const locals = {
   ]
 };
 
+// template rendering
 const nunjucks = require('nunjucks');
 app.set('view engine', 'html');
 app.engine('html', nunjucks.render);

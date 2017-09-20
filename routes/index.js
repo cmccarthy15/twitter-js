@@ -3,7 +3,7 @@ module.exports = function (io){
   const express = require('express');
   const router = express.Router();
    // could use one line instead: const router = require('express').Router();
-  const path = require('path');
+  //const path = require('path');
 
   const bodyParser = require('body-parser');
   router.use(bodyParser.urlencoded({ extended: false }));
