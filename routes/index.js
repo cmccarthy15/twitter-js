@@ -77,17 +77,17 @@ module.exports = function (io){
 'use strict';
 var express = require('express');
 var router = express.Router();
-var tweetBank = require('../tweetBank');
+//var tweetBank = require('../tweetBank');
+var client = require('../db');
 
 module.exports = function makeRouterWithSockets (io) {
 
   // a reusable function
   function respondWithAllTweets (req, res, next){
-    var allTheTweets = tweetBank.list();
-    res.render('index', {
-      title: 'Twitter.js',
-      tweets: allTheTweets,
-      showForm: true
+    client.query('select name, content, tweets.id from tweets inner join users on tweets.user_id = users.id', function (err, result) {
+      if (err) return next(err); // pass errors to Express
+      var tweets = result.rows;
+      res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
     });
   }
 
@@ -97,29 +97,57 @@ module.exports = function makeRouterWithSockets (io) {
 
   // single-user page
   router.get('/users/:username', function(req, res, next){
-    var tweetsForName = tweetBank.find({ name: req.params.username });
-    res.render('index', {
-      title: 'Twitter.js',
-      tweets: tweetsForName,
-      showForm: true,
-      username: req.params.username
+    client.query('select name, content, tweets.id from tweets inner join users on tweets.user_id = users.id where name=$1', [req.params.username], function (err, result) {
+      if (err) return next(err); // pass errors to Express
+      var tweets = result.rows;
+      res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
     });
+    // var tweetsForName = tweetBank.find({ name: req.params.username });
+    // res.render('index', {
+    //   title: 'Twitter.js',
+    //   tweets: tweetsForName,
+    //   showForm: true,
+    //   username: req.params.username
+    // });
   });
 
   // single-tweet page
   router.get('/tweets/:id', function(req, res, next){
-    var tweetsWithThatId = tweetBank.find({ id: Number(req.params.id) });
-    res.render('index', {
-      title: 'Twitter.js',
-      tweets: tweetsWithThatId // an array of only one element ;-)
+    client.query('select name, content from tweets inner join users on tweets.user_id = users.id where tweets.id = $1', [req.params.id], function (err, result) {
+      if (err) return next(err); // pass errors to Express
+      var tweets = result.rows;
+      res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
     });
+    // var tweetsWithThatId = tweetBank.find({ id: Number(req.params.id) });
+    // res.render('index', {
+    //   title: 'Twitter.js',
+    //   tweets: tweetsWithThatId // an array of only one element ;-)
+    // });
   });
 
   // create a new tweet
   router.post('/tweets', function(req, res, next){
-    var newTweet = tweetBank.add(req.body.name, req.body.text);
-    io.sockets.emit('new_tweet', newTweet);
-    res.redirect('/');
+    //var newTweet = tweetBank.add(req.body.name, req.body.text);
+    var content = req.body.text;
+    var id;
+    client.query('select * from users where name=$1', [req.body.name], function(err, result){
+      if (err) { return next(err);}
+      else if (result.rows.length > 0) {id = result.rows[0].id;}
+      else {
+        client.query('insert into users (name) values($1) returning * ', [req.body.name], function(error, result){
+          if (error) return next(error);
+          id = result.rows[0].id;
+        });
+      }
+      client.query('insert into tweets (user_id, content) values ($1, $2) returning *', [id, content], function (err, result) {
+        if (err) return next(err); // pass errors to Express
+        var tweets = result.rows;
+        res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
+      });
+     });
+
+    //io.sockets.emit('new_tweet', newTweet);
+    //res.redirect('/');
   });
 
   // // replaced this hard-coded route with general static routing in app.js
@@ -128,4 +156,4 @@ module.exports = function makeRouterWithSockets (io) {
   // });
 
   return router;
-}
+};

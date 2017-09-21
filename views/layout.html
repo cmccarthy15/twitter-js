@@ -84,20 +84,20 @@
     <!--Socket.io implementation -->
   <script src="/socket.io/socket.io.js"></script>
   <script>
-      // Load the socket.io library above, then connect to the server.
-      // Because the socket.io server is being run on the same server as your
-      // Express instance, you can connect() without any arguments.
-      var socket = io.connect();
-      socket.on('connect', function(){
-        console.log('connected to server via WebSockets!');
-      });
-      // best practice with jQuery: find selection once, not every time a func runs
-      var $tweets = $('#tweets');
-      // When 'new_tweet' events are fired, do something with the packaged tweet
-      socket.on('new_tweet', function (tweet) {
-        console.log(tweet);
-        $tweets.append('<div class="tweetbox"><img><div class="content"><p class="by"><a href="/users/' + tweet.name + '">' + tweet.name + '</a></p><p><a href="/tweets/' + tweet.id + '">' + tweet.text + '</a></p></div></div>');
-      });
+      // // Load the socket.io library above, then connect to the server.
+      // // Because the socket.io server is being run on the same server as your
+      // // Express instance, you can connect() without any arguments.
+      // var socket = io.connect();
+      // socket.on('connect', function(){
+      //   console.log('connected to server via WebSockets!');
+      // });
+      // // best practice with jQuery: find selection once, not every time a func runs
+      // var $tweets = $('#tweets');
+      // // When 'new_tweet' events are fired, do something with the packaged tweet
+      // socket.on('new_tweet', function (tweet) {
+      //   console.log(tweet);
+      //   $tweets.append('<div class="tweetbox"><img><div class="content"><p class="by"><a href="/users/' + tweet.name + '">' + tweet.name + '</a></p><p><a href="/tweets/' + tweet.id + '">' + tweet.text + '</a></p></div></div>');
+    //  });
 
     /*
     // Load the socket.io library above, then connect to the server.
