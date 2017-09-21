@@ -43,6 +43,7 @@ code {
 
 .tweetbox {
   padding: 7px;
+  height: 80px;
 }
 
 .tweetbox img {
@@ -51,15 +52,12 @@ code {
   width: 48px;
   content:url("http://lorempixel.com/48/48");
 }
+
+
 .content {
   margin-left: 60px;
 }
 .content .by {
   font-weight: bold;
-}
 
-li.tweet {
-  list-style: none;
-  margin: 10px 0 ;
 }
-
