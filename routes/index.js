@@ -84,7 +84,7 @@ module.exports = function makeRouterWithSockets (io) {
 
   // a reusable function
   function respondWithAllTweets (req, res, next){
-    client.query('select name, content, tweets.id from tweets inner join users on tweets.user_id = users.id', function (err, result) {
+    client.query('SELECT name, content, tweets.id FROM tweets INNER JOIN users ON tweets.user_id = users.id', function (err, result) {
       if (err) return next(err); // pass errors to Express
       var tweets = result.rows;
       res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
@@ -97,7 +97,7 @@ module.exports = function makeRouterWithSockets (io) {
 
   // single-user page
   router.get('/users/:username', function(req, res, next){
-    client.query('select name, content, tweets.id from tweets inner join users on tweets.user_id = users.id where name=$1', [req.params.username], function (err, result) {
+    client.query('SELECT name, content, tweets.id FROM tweets INNER JOIN users ON tweets.user_id = users.id where name=$1', [req.params.username], function (err, result) {
       if (err) return next(err); // pass errors to Express
       var tweets = result.rows;
       res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
@@ -113,7 +113,7 @@ module.exports = function makeRouterWithSockets (io) {
 
   // single-tweet page
   router.get('/tweets/:id', function(req, res, next){
-    client.query('select name, content from tweets inner join users on tweets.user_id = users.id where tweets.id = $1', [req.params.id], function (err, result) {
+    client.query('SELECT name, content FROM tweets INNER JOIN users ON tweets.user_id = users.id WHERE tweets.id = $1', [req.params.id], function (err, result) {
       if (err) return next(err); // pass errors to Express
       var tweets = result.rows;
       res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
@@ -130,16 +130,16 @@ module.exports = function makeRouterWithSockets (io) {
     //var newTweet = tweetBank.add(req.body.name, req.body.text);
     var content = req.body.text;
     var id;
-    client.query('select * from users where name=$1', [req.body.name], function(err, result){
+    client.query('SELECT * FROM users WHERE name=$1', [req.body.name], function(err, result){
       if (err) { return next(err);}
       else if (result.rows.length > 0) {id = result.rows[0].id;}
       else {
-        client.query('insert into users (name) values($1) returning * ', [req.body.name], function(error, result){
+        client.query('INSERT INTO users (name) VALUES ($1) RETURNING * ', [req.body.name], function(error, result){
           if (error) return next(error);
           id = result.rows[0].id;
         });
       }
-      client.query('insert into tweets (user_id, content) values ($1, $2) returning *', [id, content], function (err, result) {
+      client.query('INSERT INTO tweets (user_id, content) VALUES ($1, $2) RETURNING *', [id, content], function (err, result) {
         if (err) return next(err); // pass errors to Express
         var tweets = result.rows;
         res.render('index', { title: 'Twitter.js', tweets: tweets, showForm: true });
